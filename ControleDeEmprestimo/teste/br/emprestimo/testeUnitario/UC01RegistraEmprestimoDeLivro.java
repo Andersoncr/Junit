@@ -1,18 +1,22 @@
 package br.emprestimo.testeUnitario;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.emprestimo.modelo.Emprestimo;
 import br.emprestimo.modelo.Livro;
 import br.emprestimo.modelo.Usuario;
 import br.emprestimo.servico.ServicoEmprestimo;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class UC01RegistraEmprestimoDeLivro {
 	static private Livro livro;
@@ -71,27 +75,50 @@ public class UC01RegistraEmprestimoDeLivro {
 		emprestimo.setLivro(null);
 	}
 	
+	@Test
+	public void CT07QuandoUsuarioNuloErro() {
+		//cenario
+		Usuario usuario = null;
+		Emprestimo umEmprestimo = new Emprestimo();
+		//acao
+		try {
+		umEmprestimo.setUsuario(usuario);
+		fail ("Deveria falhar");
+		}catch(Exception e) {
+			assertEquals("Usuário invalido",e.getMessage());
+		}
+	}
 	
+	@Test
+	public void CT08QuandoADataDeEmprestimoForInvalidaErro() {
+		//cenario
+		String data="30/02/2018";
+		Emprestimo umEmprestimo = new Emprestimo();
+		//acao
+		boolean resultadoObtido = umEmprestimo.validaData(data);
+		//verificacao
+		assertFalse(resultadoObtido);
+	}
 	
+	@Test
+	public void CT09QuandoADataDeEmprestimoForInvalidaErro() {
+		//cenario
+		String data="09-05-2018";
+		Emprestimo umEmprestimo = new Emprestimo();
+		//acao
+		boolean resultadoObtido = umEmprestimo.validaData(data);
+		//verificacao
+		assertFalse(resultadoObtido);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Test
+	public void CT10QuandoADataDeEmprestimoForValida() {
+		//cenario
+		String data="09/05/2018";
+		Emprestimo umEmprestimo = new Emprestimo();
+		//acao
+		boolean resultadoObtido = umEmprestimo.validaData(data);
+		//verificacao
+		assertTrue(resultadoObtido);
+	}
 }
